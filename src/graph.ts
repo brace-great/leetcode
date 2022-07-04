@@ -1,31 +1,90 @@
-function longestIncreasingPath(matrix: number[][]): number {
-  if (matrix.length === 0) return 0;
-  if (matrix[0].length === 0) return 0;
-  if (matrix.length === 1 && matrix[0].length === 1) return 1;
-  if (matrix.length === 1) return matrix[0].length;
-  if (matrix[0].length === 1) return matrix.length;
-  const set = new Set() as Set<string>;
-  const dfs = (x, y, arr) => {
-    if (x < 0 || x >= matrix.length || y < 0 || y >= matrix[0].length) return;
-    if (matrix[x][y] > arr[arr.length - 1]) {
-      arr.push(matrix[x][y]);
-      dfs(x - 1, y, [...arr]);
-      dfs(x + 1, y, [...arr]);
-      dfs(x, y - 1, [...arr]);
-      dfs(x, y + 1, [...arr]);
-    } else set.add(arr.slice(1).join(" "));
-  };
-  for (let i = 0; i < matrix.length; i++) {
-    for (let j = 0; j < matrix[0].length; j++) {
-      dfs(i, j, [-1]);
+//剑指 Offer II 115. 重建序列 https://leetcode.cn/problems/ur2n8P/
+function sequenceReconstruction(
+  nums: number[],
+  sequences: number[][]
+): boolean {
+  const inDegree = new Map<number, Set<number>>();
+  const outDegree = new Map();
+  for (const sequence of sequences) {
+    for (let i = 1; i < sequence.length; i++) {
+      const [pre, cur] = [sequence[i - 1], sequence[i]];
+      if (!inDegree.has(cur)) {
+        inDegree.set(cur, new Set());
+      }
+      if (!outDegree.has(pre)) {
+        outDegree.set(pre, new Set());
+      }
+      inDegree.get(cur).add(pre);
+      outDegree.get(pre).add(cur);
     }
   }
-  return Math.max(...[...set].map((item) => item.split(" ").length));
+  const queue = [];
+  for (let i = 1; i <= nums.length; i++) {
+    if (!inDegree.has(i)) {
+      queue.push(i);
+    }
   }
+  const res = [];
+  while (queue.length) {
+    if (queue.length > 1) return false;
+    const cur = queue.shift();
+    res.push(cur);
+    const curOuts = outDegree.get(cur);
+    if (curOuts) {
+      for (const curOut of curOuts) {
+        inDegree.get(curOut).delete(cur);
+        if (!inDegree.get(curOut).size) {
+          queue.push(curOut);
+        }
+      }
+    }
+  }
+  let rs = true;
+  for (let i = 0; i < res.length; i++) {
+    if (res[i] !== nums[i]) {
+      rs = false;
+    }
+  }
+  return rs;
+}
 
-let a = "12 2 3";
-let b = a.split(" ").map((element) => parseInt(element));
-console.log(b);
+//210. 课程表 II https://leetcode-cn.com/problems/course-schedule-ii/
+function findOrder(numCourses: number, prerequisites: number[][]): number[] {
+  const inDegree = new Map();
+  const outDegree = new Map();
+  for (const [course, prereq] of prerequisites) {
+    if (!inDegree.has(course)) {
+      inDegree.set(course, []);
+    }
+    if (!outDegree.has(prereq)) {
+      outDegree.set(prereq, []);
+    }
+    inDegree.get(course).push(prereq);
+    outDegree.get(prereq).push(course);
+  }
+  const queue = [];
+  for (let i = 0; i < numCourses; i++) {
+    if (!inDegree.has(i)) {
+      queue.push(i);
+    }
+  }
+  const res = [];
+  while (queue.length) {
+    const course = queue.shift();
+    res.push(course);
+    const out = outDegree.get(course);
+    if (out) {
+      for (const prereq of out) {
+        inDegree.get(prereq).splice(inDegree.get(prereq).indexOf(course), 1);
+        if (!inDegree.get(prereq).length) {
+          queue.push(prereq);
+        }
+      }
+    }
+  }
+  return res.length === numCourses ? res : [];
+}
+
 //力扣207课程表 https://leetcode.cn/problems/course-schedule/
 function canFinish(numCourses: number, prerequisites: number[][]): boolean {
   const graph = new Map<number, Set<number>>();
