@@ -1,29 +1,11 @@
-function openLock(deadends: string[], target: string): number {
-  const visisted = new Set(deadends);
-  const queue = ["0000"];
-  let step = 0;
-  while (queue.length) {
-    let size = queue.length;
-    for (let i = 0; i < size; i++) {
-      const cur = queue.shift();
-      if (cur === target) return step;
-       if (visisted.has(cur)) {
-         continue;
-       }
-      for (let j = 0; j < 4; j++) {
-        let nextChar = (parseInt(cur.charAt(j)) + 1) % 10;
-        let next = cur.slice(0, j) + nextChar + cur.slice(j + 1);
-        queue.push(next);
-
-        nextChar = (parseInt(cur.charAt(j)) +9) % 10;
-        next = cur.slice(0, j) + nextChar + cur.slice(j + 1);
-        queue.push(next);
-      }
-    }
-    step++;
-  }
-  return -1;
-}
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * var obj = new MyQueue()
+ * obj.push(x)
+ * var param_2 = obj.pop()
+ * var param_3 = obj.peek()
+ * var param_4 = obj.empty()
+ */
 
 //373. 查找和最小的 K 对数字 https://leetcode-cn.com/problems/find-k-pairs-with-smallest-sums/
 var kSmallestPairs = function (nums1, nums2, k) {
