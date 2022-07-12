@@ -1,12 +1,65 @@
-/**
- * Your MyQueue object will be instantiated and called as such:
- * var obj = new MyQueue()
- * obj.push(x)
- * var param_2 = obj.pop()
- * var param_3 = obj.peek()
- * var param_4 = obj.empty()
- */
+import * as readline from "readline";
+//读取控制台输入
+let rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+function rlExample() {
+  rl.question("Is this example useful? [y/n] ", (answer) => {
+    switch (answer.toLowerCase()) {
+      case "y":
+        console.log("Super!");
+        break;
+      case "n":
+        console.log("Sorry! :(");
+        break;
+      default:
+        console.log("Invalid answer!");
+    }
+    rl.close();
+  });
+}
+//猜数字游戏
+function bagels() {
+  let rs = randomInt(100, 999).toString();
+  function judge(n: string) {
+    for (let i = 0; i < n.length; i++) {
+      if (n[i] == rs[i]) {
+        return "Fermi";
+      }
+    }
+    let count = 0;
+    for (let i = 0; i < n.length; i++) {
+      if (rs.includes(n[i])) {
+        count++;
+      }
+    }
+    if (count) return "Pico";
+    else return "Bagels";
+  }
+  let cb = (answer) => {
+    switch (answer.toLowerCase()) {
+      case rs:
+        console.log("right!");
+        rl.close();
+        break;
+      default:
+        console.log(judge(answer));
+        core();
+        break;
+    }
+  };
+  let core = () => {
+    rl.question("lets guess:", cb);
+  };
+  core();
+}
 
+//生成从minNum到maxNum的随机数
+function randomInt(minNum, maxNum) {
+  var random = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+  return random;
+}
 //373. 查找和最小的 K 对数字 https://leetcode-cn.com/problems/find-k-pairs-with-smallest-sums/
 var kSmallestPairs = function (nums1, nums2, k) {
   let m = nums1.length,
