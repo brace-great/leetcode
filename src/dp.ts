@@ -1,18 +1,17 @@
-
 //1155. 掷骰子的N种方法 https://leetcode-cn.com/problems/dice-roll-simulation/
 function numRollsToTarget(n: number, k: number, target: number): number {
   const MOD = 1000000007;
-  const dp = new Array(n+1).fill(0).map(() => new Array(target+1).fill(0));
+  const dp = new Array(n + 1).fill(0).map(() => new Array(target + 1).fill(0));
   dp[0][0] = 1;
   for (let i = 1; i <= n; i++) {
     for (let j = 1; j <= target; j++) {
-      for (let t = 1; t <= k&&j>=t; t++) {
-        dp[i][j] = (dp[i][j] + dp[i-1][j-t]) % MOD;
+      for (let t = 1; t <= k && j >= t; t++) {
+        dp[i][j] = (dp[i][j] + dp[i - 1][j - t]) % MOD;
       }
     }
   }
-  return  dp[n][target];
-};
+  return dp[n][target];
+}
 
 //322. 零钱兑换 https://leetcode-cn.com/problems/coin-change/
 function coinChange(coins: number[], amount: number): number {
@@ -125,18 +124,22 @@ function lenLongestFibSubseq(arr: number[]): number {
   const dp = new Array(arr.length)
     .fill(0)
     .map(() => new Array(arr.length).fill(0));
+  for (let i = 1; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr.slice(0, i).includes(arr[j] - arr[i])) {
+        let q = arr.indexOf(arr[j] - arr[i]);
+        if (dp[q][i] == 0) {
+          dp[i][j] = 3;
+        } else {
+          dp[i][j] = dp[q][i] + 1;
+        }
+      }
+    }
+  }
   let max = 0;
   for (let i = 0; i < arr.length; i++) {
     for (let j = i + 1; j < arr.length; j++) {
-      for (let k = 0; k < i; k++) {
-        if (arr[i] + arr[k] === arr[j]) {
-          if (dp[k][i] === 0) {
-            dp[k][i] = 2;
-          }
-          dp[i][j] = dp[k][i] + 1;
-          max = Math.max(max, dp[i][j]);
-        }
-      }
+      max = Math.max(max, dp[i][j]);
     }
   }
   return max;

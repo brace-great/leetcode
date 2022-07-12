@@ -145,7 +145,7 @@ function maxPathSum(root: TreeNode | null): number {
   return rs;
 }
 //297. 二叉树的序列化与反序列化 https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/
-function serialize (root) {
+function serialize(root) {
   // 如果节点为空，使用一个特定的字符标识
   if (!root) {
     return "X";
@@ -157,7 +157,7 @@ function serialize (root) {
 
   // 将当前二叉树按照根,左,右的方式拼接
   return `${root.val},${left},${right}`;
-};
+}
 
 function deserialize(data) {
   // 将序列化的字符串，转换为数组
@@ -185,7 +185,7 @@ function deserialize(data) {
   }
 
   return build();
-};
+}
 
 //剑指 Offer 16. 数值的整数次方 https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/
 function myPow(x: number, n: number): number {
