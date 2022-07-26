@@ -1,10 +1,59 @@
-import * as readline from "readline";
-//读取控制台输入
-let rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
+//js代理/拦截器例子
+const user = {
+  firstName: "John",
+  lastName: "Doe",
+};
+
+const getFullName = function (user) {
+  return `${user.firstName} ${user.lastName}`;
+};
+
+const getFullNameProxy = new Proxy(getFullName, {
+  apply(target, thisArg, args: any) {
+    //@ts-ignore
+    return target(...args).toUpperCase();
+  },
 });
+
+//发布订阅
+class EventEmitter {
+  subscriptions = new Map();
+
+  subscribe(eventName, callback) {
+    if (!this.subscriptions.has(eventName)) {
+      this.subscriptions.set(eventName, new Set());
+    }
+    const subscriptions = this.subscriptions.get(eventName);
+    const callbackObj = { callback };
+    subscriptions.add(callbackObj);
+
+    return {
+      release: () => {
+        subscriptions.delete(callbackObj);
+        if (subscriptions.size === 0) {
+          subscriptions.delete(eventName);
+        }
+      },
+    };
+  }
+
+  emit(eventName, ...args) {
+    const subscriptions = this.subscriptions.get(eventName);
+    if (subscriptions) {
+      subscriptions.forEach((cbObj) => {
+        cbObj.callback.apply(this, args);
+      });
+    }
+  }
+}
+
+//读取控制台输入
+import * as readline from "readline";
 function rlExample() {
+  let rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
   rl.question("Is this example useful? [y/n] ", (answer) => {
     switch (answer.toLowerCase()) {
       case "y":
@@ -21,6 +70,10 @@ function rlExample() {
 }
 //猜数字游戏
 function bagels() {
+  let rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
   let rs = randomInt(100, 999).toString();
   function judge(n: string) {
     for (let i = 0; i < n.length; i++) {

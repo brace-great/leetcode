@@ -1,5 +1,16 @@
 import { TreeNode } from "./tree";
 
+//带缓存斐波拉契
+function feibo() {
+  let cache = [];
+  return function core(n) {
+    if (n == 1 || n == 0) return n;
+    cache[n - 1] = cache[n - 1] || core(n - 1);
+    cache[n - 2] = cache[n - 2] || core(n - 2);
+    return cache[n - 1] + cache[n - 2];
+  };
+}
+
 //93. 复原 IP 地址 https://leetcode-cn.com/problems/restore-ip-addresses/
 function restoreIpAddresses(s: string): string[] {
   const check = (str: string) => {
