@@ -1,5 +1,39 @@
 import { Map } from "typescript";
-
+function addOneRow(
+  root: TreeNode | null,
+  val: number,
+  depth: number
+): TreeNode | null {
+  let nowDepth;
+  if (!root) return null;
+  else nowDepth = 1;
+  if (depth == 1) {
+    let rs = new TreeNode();
+    rs.val = val;
+    rs.left = root;
+    return rs;
+  } else {
+    let tem = [];
+    let parent = [];
+    tem.push([root, nowDepth]);
+    while (tem.length) {
+      let a = tem.pop();
+      if (a[0].left) tem.push([a[0].left, a[1] + 1]);
+      if (a[0].right) tem.push([a[0].right, a[1] + 1]);
+      if (a[1] == depth - 1) parent.push(a[0]);
+    }
+    let sons = [];
+    for (let i of parent) {
+      if (i.left) sons.push(i.left);
+      if (i.right) sons.push(i.right);
+      let a = new TreeNode(val, i.left);
+      let b = new TreeNode(val, null, i.right);
+      i.left = a;
+      i.right = b;
+    }
+    return root;
+  }
+}
 export class TreeNode {
   val: number;
   left: TreeNode | null;
