@@ -1,24 +1,31 @@
-import random
-import sys
-import time
+from typing import List
 
 
-def how_long(func):
-    def fun(*args, **kwargs):
-        t = time.perf_counter()
-        result = func(*args, **kwargs)
-        print(f'func {func.__name__} cost time:{time.perf_counter() - t:.8f} s')
-        return result
-    return fun
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        rs = []
+        path = []
+        used = []
+        for i in range(len(nums)):
+            used.append(False)
+
+        def backtracking(i):
+            if len(path) == len(nums):
+                rs.append(path.copy())
+                return
+            for j in range(i, len(nums)):
+                if used[j]:
+                    continue
+                path.append(nums[j])
+                used[j] = True
+                backtracking(0)
+                used[j] = False
+                path.pop()
+
+        backtracking(0)
+
+        return rs
 
 
-@how_long
-def get_input():
-    input('now!')
-
-
-delay = random.randint(2, 8)
-print('wait....')
-time.sleep(delay)
-
-get_input()
+solution = Solution()
+print(solution.permute([4, 6, 7]))

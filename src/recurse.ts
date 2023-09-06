@@ -1,5 +1,6 @@
 import { TreeNode } from "./tree";
-//https://leetcode.cn/problems/special-binary-string/submissions/
+
+//761. 特殊的二进制序列 https://leetcode.cn/problems/special-binary-string/submissions/
 function makeLargestSpecial(s: string): string {
   function digui(s: string): string {
     const list = new Array<string>();

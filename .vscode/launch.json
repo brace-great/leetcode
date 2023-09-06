@@ -16,12 +16,31 @@
       "name": "Current TS File",
       "type": "node",
       "request": "launch",
-      "args": ["${relativeFile}"],
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "args": [
+        "${relativeFile}"
+      ],
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register"
+      ],
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "auto",
+      "type": "auto-debug",
+      "request": "launch",
+      "map": {
+        "tests/*.py": "Python: Test Folder Debug",
+        "*.py": "Python: Current File",
+        "*.cpp": "g++.exe - Build and debug active file",
+        "Makefile": "g++.exe - Build and debug Makefile project",
+        "*.js": "Current TS File",
+        "*.ts": "Current TS File"
+      }
     }
   ]
 }

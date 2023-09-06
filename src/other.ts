@@ -1,3 +1,76 @@
+
+ function debounce(func, wait, option = {leading: false, trailing: true}) {
+  let timer
+  return function (...args) {
+    if (timer) {
+     clearTimeout(timer)
+      timer = setTimeout(() => {
+       if (option.trailing) {
+         func(...args)
+       }
+     }, wait);
+     return;
+    }
+    if (option.leading) {
+     func(...args)
+    }
+    timer=setTimeout(() => {
+      if (!option.leading) {
+        func(...args)
+      }    }, wait);
+  }
+}
+
+
+
+function throttle(func, wait, option = { leading: true, trailing: true }) {
+  let timer;
+  let lastArgs
+  return function (...args) {
+    if (timer) {
+      lastArgs=args
+      return;
+    }
+    if (option.leading == true) {
+      func(...args)
+    }
+    timer = setTimeout(() => {
+      timer = null;
+      if(lastArgs && option.trailing==true)
+      func(...lastArgs)
+    }, wait);
+    };
+
+}
+const logg = (cc) => console.log(cc);
+const ff = throttle(logg, 3);
+ff("gg"); 
+ff("cc");
+function pairwise(arr, arg) {
+  const marked = Object.fromEntries(
+    new Map(arr.map((v, i) => [i, false])).entries()
+  );
+  const rs = [];
+  let tem;
+  for (let i = 0; i < arr.length; i++) {
+    if (marked[i]) continue;
+    tem = arr[i];
+    for (let j = i + 1; j < arr.length; j++) {
+      if (marked[j]) continue;
+      if (arr[j] + tem == arg) {
+        marked[i] = true;
+        marked[j] = true;
+        rs.push(i);
+        rs.push(j);
+        break;
+      }
+    }
+    tem = null;
+  }
+  return rs.reduce((a, b) => a + b, 0);
+}
+pairwise([0, 0, 0, 0, 1, 1], 1);
+
 //js代理/拦截器例子
 const user = {
   firstName: "John",
